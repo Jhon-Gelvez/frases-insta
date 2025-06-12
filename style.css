@@ -1,0 +1,210 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh; /* Asegura que cubra toda la pantalla */
+    background: linear-gradient(to bottom, #833ab4, #fd1d1d, #fcb045);
+
+    min-height: 100dvh;
+    font-family: "Open Sans", sans-serif;
+    color: #2b2b2c;
+}
+
+.header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    position: relative;
+}
+
+.header__container-menu {
+    width: fit-content;
+    margin: 0;
+    padding: 0;
+    margin-right: auto;
+}
+
+h1 {
+    margin-right: auto;
+}
+
+#nav-mobile {
+    background-color: transparent;
+    border: none;
+    width: 40px;
+}
+
+#nav-mobile > span {
+    width: 100%;
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+.header__ul {
+    z-index: 1000;
+    width: 60%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+    position: absolute;
+    top: 60px;
+    left: 0; /* Añadido para alinear a la derecha */
+    transition: transform 0.4s ease; /* Solo animamos transform */
+    background-color: #0003;
+    transform: translateX(-100%);
+    backdrop-filter: blur(4px);
+}
+
+.open-menu {
+    transform: translateX(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.header__li {
+    display: block;
+    padding: 15px 20px; /* Añadido padding para mejor apariencia */
+    text-transform: uppercase;
+    text-align: center;
+    color: white; /* Añadido color de texto */
+    text-decoration: none; /* Elimina subrayado de links si los hay */
+    cursor: pointer;
+}
+
+.header__li:hover {
+    background-color: #0005;
+}
+
+/* main */
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70dvh;
+    max-width: 740px;
+    min-width: 300px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.content {
+    display: none;
+}
+
+.frase {
+    background-color: rgba(255, 255, 255, 0.2); /* Fondo semitransparente */
+    backdrop-filter: blur(12px); /* Mayor desenfoque para efecto vidrio */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+    padding: 2.5rem; /* Más espacio interno */
+    border-radius: 1.25rem; /* Esquinas más redondeadas */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2); /* Sombra exterior + interior */
+
+    /* Transiciones para múltiples propiedades */
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.4s ease, border-color 0.3s ease, background-color 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    margin: 16px 0;
+
+    /* Efecto de borde animado */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de borde animado */
+.frase::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+    z-index: 1;
+}
+
+.frase:hover {
+    transform: translateY(-0.75rem) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.frase:hover::before {
+    transform: scaleX(1);
+}
+
+.frase > p {
+    color: #111827; /* Texto oscuro para contraste */
+    font-size: 1.125rem;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Efecto de brillo al hacer hover */
+.frase::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0) 60%
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.frase:hover::after {
+    opacity: 1;
+}
+/* Media query para desktop o pantallas más grandes: el menú siempre visible, sin botón */
+@media (min-width: 768px) {
+    .header__ul {
+        position: static; /* Vuelve a la posición normal en el flujo del documento */
+        width: fit-content; /* Se ajusta al contenido */
+        max-width: none; /* Elimina la limitación de ancho */
+        transform: translateX(0); /* Siempre visible */
+        background-color: transparent; /* Sin fondo en desktop */
+        backdrop-filter: none; /* Sin blur en desktop */
+        -webkit-backdrop-filter: none;
+        border: none; /* Sin bordes */
+        box-shadow: none; /* Sin sombra */
+        display: flex; /* Para poner los elementos en línea */
+        margin-left: auto; /* Alinea el menú a la derecha del header */
+    }
+
+    .header__li {
+        border-bottom: none; /* Elimina los separadores */
+        padding: 0 15px; /* Ajusta el padding para horizontal */
+        color: #f0f0f0; /* Un color ligeramente diferente para los links */
+        transition: color 0.3s ease; /* Transición suave para el color */
+    }
+
+    .header__li:hover {
+        background-color: transparent; /* Sin fondo al pasar el ratón */
+        color: #ffffff; /* Color al pasar el ratón */
+    }
+
+    #nav-mobile {
+        display: none; /* Oculta el botón del menú móvil */
+    }
+}
