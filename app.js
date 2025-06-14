@@ -1,7 +1,14 @@
 document.getElementById("nav-mobile").addEventListener("click", function () {
-    document.querySelector(".header__ul").classList.toggle("open-menu");
+    const menu = document.querySelector(".header__ul");
+    menu.classList.toggle("open-menu");
 });
 
+// Añadir event listener a todos los .header__li para cerrar el menú al hacer clic
+document.querySelectorAll(".header__li").forEach((item) => {
+    item.addEventListener("click", () => {
+        document.querySelector(".header__ul").classList.remove("open-menu");
+    });
+});
 // Seleccionar todos los elementos li y content
 const menuItems = document.querySelectorAll(".header__li");
 const contentSections = document.querySelectorAll(".content");
@@ -28,40 +35,60 @@ if (contentSections.length > 0) {
     });
 }
 
-// const frases = {
-//     motivacion: [
-//         "Hoy es el día para brillar ✨",
-//         "Tú puedes con todo, ¡sigue adelante!",
-//         "Cada paso te acerca a tus sueños.",
-//     ],
-//     amor: [
-//         "Eres mi razón para sonreír cada día ❤️",
-//         "Contigo, el mundo es más bonito.",
-//         "Amar es encontrar hogar en otra persona.",
-//     ],
-//     humor: [
-//         "La vida es corta, ¡come el postre primero! 😜",
-//         "No estoy vago, estoy en modo ahorro de energía.",
-//         "Mi superpoder es desaparecer cuando hay que lavar platos.",
-//     ],
-// };
+// efecto a la frase cunado le dan un click
 
-// const form = document.getElementById("fraseForm");
-// const resultado = document.getElementById("resultado");
-// const copiarBtn = document.getElementById("copiar");
+// Crear botón de copiar
+const btnCopiar = document.createElement("a");
+btnCopiar.className = "btnCopiar material-symbols-outlined";
+btnCopiar.textContent = "content_copy";
+btnCopiar.style.cursor = "pointer";
 
-// form.addEventListener("submit", (e) => {
-//     e.preventDefault();
-//     const categoria = document.getElementById("categoria").value;
-//     const frasesCategoria = frases[categoria];
-//     const fraseAleatoria =
-//         frasesCategoria[Math.floor(Math.random() * frasesCategoria.length)];
+// Añadir a cada tarjeta
+document.querySelectorAll(".frase").forEach((tarjeta) => {
+    const btnClonado = btnCopiar.cloneNode(true);
 
-//     resultado.textContent = fraseAleatoria;
-//     copiarBtn.classList.remove("hidden");
-// });
+    // Insertar botón después de la tarjeta
+    tarjeta.after(btnClonado);
 
-// copiarBtn.addEventListener("click", () => {
-//     navigator.clipboard.writeText(resultado.textContent);
-//     alert("¡Frase copiada!");
-// });
+    // Evento para copiar y resaltar
+    btnClonado.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        // 1. Copiar contenido
+        const textoACopiar = tarjeta.textContent.trim();
+        navigator.clipboard
+            .writeText(textoACopiar)
+            .then(() => {
+                // 2. Feedback visual
+                btnClonado.textContent = "done";
+
+                // 3. Resaltar tarjeta
+                document.querySelectorAll(".frase").forEach((t) => {
+                    t.classList.toggle("highlight", t === tarjeta);
+                });
+
+                // 4. Restaurar ícono después de 2 segundos
+                setTimeout(() => {
+                    btnClonado.textContent = "content_copy";
+                }, 2000);
+            })
+            .catch((err) => {
+                console.error("Error al copiar: ", err);
+                btnClonado.textContent = "error";
+            });
+    });
+});
+
+// Evento para resaltar al hacer click en la tarjeta
+document.addEventListener("click", (e) => {
+    const tarjeta = e.target.closest(".frase");
+    if (tarjeta) {
+        document.querySelectorAll(".frase").forEach((t) => {
+            t.classList.toggle("highlight", t === tarjeta);
+        });
+    } else if (!e.target.closest(".btnCopiar")) {
+        document.querySelectorAll(".frase").forEach((t) => {
+            t.classList.remove("highlight");
+        });
+    }
+});
